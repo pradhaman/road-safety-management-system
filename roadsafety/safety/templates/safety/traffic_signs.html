@@ -1,0 +1,33 @@
+{% extends 'safety/base.html' %}
+{% block title %}Traffic Signs — RoadSafe{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <h1>🚦 Traffic Signs</h1>
+  <p>Recognize every sign. Drive with confidence.</p>
+</div>
+<div class="container">
+  <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+    <a href="/traffic-signs/" class="btn" style="background:{% if not selected %}#E94560{% else %}#ddd{% endif %};color:{% if not selected %}white{% else %}#333{% endif %};">All</a>
+    <a href="?type=mandatory" class="btn" style="background:{% if selected == 'mandatory' %}#E94560{% else %}#ddd{% endif %};color:{% if selected == 'mandatory' %}white{% else %}#333{% endif %};">Mandatory</a>
+    <a href="?type=cautionary" class="btn" style="background:{% if selected == 'cautionary' %}#E94560{% else %}#ddd{% endif %};color:{% if selected == 'cautionary' %}white{% else %}#333{% endif %};">Cautionary</a>
+    <a href="?type=informatory" class="btn" style="background:{% if selected == 'informatory' %}#E94560{% else %}#ddd{% endif %};color:{% if selected == 'informatory' %}white{% else %}#333{% endif %};">Informatory</a>
+  </div>
+  {% if signs %}
+  <div class="grid-3">
+    {% for sign in signs %}
+    <div class="card" style="text-align:center;">
+      <div style="font-size:3rem; margin-bottom:0.6rem;">{{ sign.emoji }}</div>
+      <span class="badge badge-{% if sign.sign_type == 'mandatory' %}red{% elif sign.sign_type == 'cautionary' %}yellow{% else %}blue{% endif %}" style="margin-bottom:0.6rem;">{{ sign.get_sign_type_display }}</span>
+      <h3 style="margin-bottom:0.4rem;">{{ sign.name }}</h3>
+      <p>{{ sign.description }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card" style="text-align:center; padding:3rem;">
+    <div style="font-size:2rem; margin-bottom:0.5rem;">🚦</div>
+    <p>No signs found. Admin can add traffic signs from the admin panel.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

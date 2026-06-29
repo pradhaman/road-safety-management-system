@@ -1,0 +1,29 @@
+{% extends 'safety/base.html' %}
+{% block title %}Register — RoadSafe{% endblock %}
+{% block content %}
+<div style="min-height:80vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
+  <div class="card" style="width:100%; max-width:460px;">
+    <div style="text-align:center; margin-bottom:1.5rem;">
+      <div style="font-size:2rem;">🛡️</div>
+      <h2 style="font-size:1.5rem; margin-top:0.5rem;">Create Account</h2>
+      <p style="color:#7F8C8D; font-size:0.88rem;">Join RoadSafe and help make roads safer</p>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group">
+        <label>{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="form-errors">{{ field.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-accent" style="width:100%; padding:0.75rem; font-size:0.95rem; margin-top:0.5rem;">Create Account</button>
+    </form>
+    <p style="text-align:center; margin-top:1.2rem; font-size:0.88rem; color:#7F8C8D;">
+      Already have an account? <a href="/login/" style="color:#E94560; font-weight:600;">Login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'safety/base.html' %}
+{% block title %}Dashboard — RoadSafe{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <h1>👋 Welcome, {{ user.first_name|default:user.username }}!</h1>
+  <p>Your Road Safety Dashboard</p>
+</div>
+<div class="container">
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1.2rem; margin-bottom:2rem;">
+    <div class="card" style="text-align:center; border-top: 4px solid #E94560;">
+      <div style="font-size:2rem; font-weight:800; color:#E94560;">{{ total_reports }}</div>
+      <div style="color:#7F8C8D; font-size:0.88rem; margin-top:0.3rem;">Hazards Reported</div>
+    </div>
+    <div class="card" style="text-align:center; border-top: 4px solid #27AE60;">
+      <div style="font-size:2rem;">🛡️</div>
+      <div style="color:#7F8C8D; font-size:0.88rem; margin-top:0.3rem;">Safety Contributor</div>
+    </div>
+    <div class="card" style="text-align:center; border-top: 4px solid #F39C12;">
+      <div style="font-size:2rem;">📋</div>
+      <div style="color:#7F8C8D; font-size:0.88rem; margin-top:0.3rem;">Rules Reviewed</div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+    <h2 style="font-size:1.3rem;">My Recent Reports</h2>
+    <a href="/report-hazard/" class="btn btn-accent">+ Report Hazard</a>
+  </div>
+
+  {% if reports %}
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td style="font-weight:600;">{{ r.title }}</td>
+          <td>{{ r.get_hazard_type_display }}</td>
+          <td style="color:#7F8C8D;">{{ r.location }}</td>
+          <td>
+            <span class="badge badge-{% if r.status == 'resolved' %}green{% elif r.status == 'reviewed' %}yellow{% else %}red{% endif %}">
+              {{ r.get_status_display }}
+            </span>
+          </td>
+          <td style="color:#7F8C8D; font-size:0.82rem;">{{ r.reported_at|date:"d M Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:1rem;">
+    <a href="/my-reports/" style="color:#E94560; font-size:0.88rem; font-weight:600;">View all reports →</a>
+  </div>
+  {% else %}
+  <div class="card" style="text-align:center; padding:3rem;">
+    <div style="font-size:2.5rem; margin-bottom:0.8rem;">📭</div>
+    <h3>No reports yet</h3>
+    <p style="margin:0.5rem 0 1.2rem;">Help improve road safety by reporting hazards in your area.</p>
+    <a href="/report-hazard/" class="btn btn-accent">Report Your First Hazard</a>
+  </div>
+  {% endif %}
+
+  <div style="margin-top:2rem; display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1rem;">
+    <a href="/traffic-rules/" style="text-decoration:none;"><div class="card" style="text-align:center; cursor:pointer;">📋<br><strong>Traffic Rules</strong></div></a>
+    <a href="/traffic-signs/" style="text-decoration:none;"><div class="card" style="text-align:center; cursor:pointer;">🚦<br><strong>Traffic Signs</strong></div></a>
+    <a href="/safety-tips/" style="text-decoration:none;"><div class="card" style="text-align:center; cursor:pointer;">💡<br><strong>Safety Tips</strong></div></a>
+    <a href="/emergency-contacts/" style="text-decoration:none;"><div class="card" style="text-align:center; cursor:pointer;">🆘<br><strong>Emergency</strong></div></a>
+  </div>
+</div>
+{% endblock %}

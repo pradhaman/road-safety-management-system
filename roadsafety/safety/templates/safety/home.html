@@ -1,0 +1,104 @@
+{% extends 'safety/base.html' %}
+{% block title %}RoadSafe — Home{% endblock %}
+{% block content %}
+
+<div style="background: linear-gradient(135deg, #1A1A2E 0%, #0F3460 100%); color: white; padding: 5rem 2rem; text-align: center;">
+  <div style="font-size: 3.5rem; margin-bottom: 1rem;">🛡️</div>
+  <h1 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem;">Road Safety Management System</h1>
+  <p style="font-size: 1.1rem; color: rgba(255,255,255,0.75); max-width: 560px; margin: 0 auto 2rem; line-height: 1.7;">
+    Promoting safer roads through awareness, education, and community reporting. Together we can save lives.
+  </p>
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    {% if user.is_authenticated %}
+      <a href="/report-hazard/" class="btn btn-accent" style="font-size:1rem; padding:0.7rem 1.8rem;">Report a Hazard</a>
+      <a href="/dashboard/" class="btn btn-outline-w" style="font-size:1rem; padding:0.7rem 1.8rem;">My Dashboard</a>
+    {% else %}
+      <a href="/register/" class="btn btn-accent" style="font-size:1rem; padding:0.7rem 1.8rem;">Get Started</a>
+      <a href="/traffic-rules/" class="btn btn-outline-w" style="font-size:1rem; padding:0.7rem 1.8rem;">View Traffic Rules</a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="container">
+  <h2 style="text-align:center; font-size:1.7rem; margin-bottom:0.5rem; margin-top:1rem;">What We Offer</h2>
+  <p style="text-align:center; color:#7F8C8D; margin-bottom:2rem;">Everything you need to stay safe on the road</p>
+
+  <div class="grid-3">
+    <a href="/traffic-rules/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">📋</div>
+        <h3>Traffic Rules</h3>
+        <p>Learn essential traffic rules for drivers, pedestrians, and cyclists to stay safe.</p>
+      </div>
+    </a>
+    <a href="/traffic-signs/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">🚦</div>
+        <h3>Traffic Signs</h3>
+        <p>Understand mandatory, cautionary, and informatory road signs with clear descriptions.</p>
+      </div>
+    </a>
+    <a href="/safety-tips/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">💡</div>
+        <h3>Safety Tips</h3>
+        <p>Practical safety tips for drivers, riders, and pedestrians to prevent accidents.</p>
+      </div>
+    </a>
+    <a href="/report-hazard/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">⚠️</div>
+        <h3>Report Hazard</h3>
+        <p>Report road hazards, accidents, potholes, or broken signals in your area.</p>
+      </div>
+    </a>
+    <a href="/emergency-contacts/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">🆘</div>
+        <h3>Emergency Contacts</h3>
+        <p>Quick access to police, ambulance, and road helpline numbers across India.</p>
+      </div>
+    </a>
+    <a href="/dashboard/" style="text-decoration:none;">
+      <div class="card" style="text-align:center; cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:2.5rem; margin-bottom:0.8rem;">📊</div>
+        <h3>My Dashboard</h3>
+        <p>Track your hazard reports and contributions to improving road safety.</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- SAFETY TIPS PREVIEW -->
+  {% if tips %}
+  <h2 style="font-size:1.5rem; margin: 3rem 0 1rem;">Quick Safety Tips</h2>
+  <div class="grid-3">
+    {% for tip in tips %}
+    <div class="card">
+      <span class="badge badge-{% if tip.audience == 'driver' %}blue{% elif tip.audience == 'rider' %}yellow{% else %}green{% endif %}" style="margin-bottom:0.6rem;">{{ tip.get_audience_display }}</span>
+      <p>{{ tip.tip }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- EMERGENCY STRIP -->
+  {% if contacts %}
+  <div style="background: #fde8e8; border: 1px solid #f5c6cb; border-radius: 10px; padding: 1.5rem; margin-top: 3rem;">
+    <h2 style="color:#C0392B; margin-bottom:1rem; font-size:1.2rem;">🆘 Emergency Numbers</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+      {% for c in contacts %}
+      <div style="background:white; border-radius:8px; padding:0.8rem 1.2rem; display:flex; align-items:center; gap:0.6rem; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+        <span style="font-size:1.4rem;">{{ c.emoji }}</span>
+        <div>
+          <div style="font-weight:700; font-size:0.9rem;">{{ c.name }}</div>
+          <div style="color:#C0392B; font-weight:800; font-size:1.1rem;">{{ c.number }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

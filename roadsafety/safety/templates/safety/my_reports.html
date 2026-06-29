@@ -1,0 +1,48 @@
+{% extends 'safety/base.html' %}
+{% block title %}My Reports — RoadSafe{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <h1>📊 My Hazard Reports</h1>
+  <p>Track the status of your submitted reports</p>
+</div>
+<div class="container">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
+    <p style="color:#7F8C8D;">{{ reports.count }} report{{ reports.count|pluralize }} submitted</p>
+    <a href="/report-hazard/" class="btn btn-accent">+ New Report</a>
+  </div>
+  {% if reports %}
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th><th>Type</th><th>Location</th><th>Description</th><th>Status</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td style="font-weight:600;">{{ r.title }}</td>
+          <td>{{ r.get_hazard_type_display }}</td>
+          <td style="color:#7F8C8D;">{{ r.location }}</td>
+          <td style="color:#7F8C8D; font-size:0.83rem; max-width:200px;">{{ r.description|truncatechars:60 }}</td>
+          <td>
+            <span class="badge badge-{% if r.status == 'resolved' %}green{% elif r.status == 'reviewed' %}yellow{% else %}red{% endif %}">
+              {{ r.get_status_display }}
+            </span>
+          </td>
+          <td style="color:#7F8C8D; font-size:0.82rem;">{{ r.reported_at|date:"d M Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card" style="text-align:center; padding:3rem;">
+    <div style="font-size:2.5rem; margin-bottom:0.8rem;">📭</div>
+    <h3>No reports yet</h3>
+    <p style="margin:0.5rem 0 1.2rem;">Start contributing to road safety by reporting hazards near you.</p>
+    <a href="/report-hazard/" class="btn btn-accent">Report a Hazard</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
