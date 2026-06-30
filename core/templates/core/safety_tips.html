@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% block title %}Safety Tips — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Practical guidance</span>
+        <h2>Safety Tips for Every Road User</h2>
+        <p class="sub">Filter by who you are on the road today.</p>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <a href="{% url 'safety_tips' %}" class="filter-pill {% if not selected_audience %}active{% endif %}">All</a>
+      {% for value, label in audiences %}
+        <a href="?audience={{ value }}" class="filter-pill {% if selected_audience == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="grid grid-3">
+      {% for tip in tips %}
+        <div class="card card-tip">
+          <span class="tag">{{ tip.get_audience_display }}</span>
+          <h3 style="margin-top:10px;">{{ tip.title }}</h3>
+          <p>{{ tip.content }}</p>
+        </div>
+      {% empty %}
+        <p>No tips found for this audience yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

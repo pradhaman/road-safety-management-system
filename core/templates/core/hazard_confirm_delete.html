@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block title %}Delete Report — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-card">
+      <h2>Delete This Report?</h2>
+      <p>You're about to permanently delete the report for <strong>{{ object.location }}</strong>. This can't be undone.</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <button type="submit" class="btn btn-danger">Yes, Delete It</button>
+          <a href="{% url 'hazard_detail' object.pk %}" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

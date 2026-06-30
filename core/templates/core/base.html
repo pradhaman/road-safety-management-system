@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Road Safety Management System{% endblock %}</title>
+  <meta name="description" content="Traffic rules, road signs, safety tips, emergency contacts, and hazard reporting — all in one place.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="hazard-stripe"></div>
+    <div class="container">
+      <nav class="navbar">
+        <a href="{% url 'home' %}" class="brand">
+          <span class="brand-mark">RS</span>
+          Road Safety
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="{% url 'traffic_rules' %}" class="{% if request.resolver_match.url_name == 'traffic_rules' %}active{% endif %}">Rules</a></li>
+          <li><a href="{% url 'traffic_signs' %}" class="{% if request.resolver_match.url_name == 'traffic_signs' %}active{% endif %}">Signs</a></li>
+          <li><a href="{% url 'safety_tips' %}" class="{% if request.resolver_match.url_name == 'safety_tips' %}active{% endif %}">Safety Tips</a></li>
+          <li><a href="{% url 'hazard_list' %}" class="{% if 'hazard' in request.resolver_match.url_name %}active{% endif %}">Reports</a></li>
+          <li><a href="{% url 'emergency_contacts' %}" class="{% if request.resolver_match.url_name == 'emergency_contacts' %}active{% endif %}">Emergency</a></li>
+        </ul>
+
+        <div class="nav-auth">
+          {% if user.is_authenticated %}
+            <a href="{% url 'hazard_create' %}" class="btn btn-primary btn-sm">Report Hazard</a>
+            <a href="{% url 'profile' %}" class="btn btn-outline btn-sm">{{ user.username }}</a>
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline btn-sm">Logout</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline btn-sm">Log In</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-sm">Sign Up</a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container" style="padding-top:20px;">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" data-autohide>{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Road Safety Management System</h4>
+          <p style="font-size:0.88rem; max-width:380px;">
+            Helping drivers, riders, cyclists, and pedestrians stay informed and stay safe —
+            with rules, signs, tips, and a way to report hazards before they cause harm.
+          </p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="{% url 'traffic_rules' %}">Traffic Rules</a></li>
+            <li><a href="{% url 'traffic_signs' %}">Traffic Signs</a></li>
+            <li><a href="{% url 'safety_tips' %}">Safety Tips</a></li>
+            <li><a href="{% url 'hazard_list' %}">Hazard Reports</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Emergency</h4>
+          <ul>
+            <li><a href="{% url 'emergency_contacts' %}">All Helpline Numbers</a></li>
+            <li>Police — 100</li>
+            <li>Ambulance — 108</li>
+            <li>All-in-one — 112</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; {% now "Y" %} Road Safety Management System. Built for awareness, not as legal advice.</span>
+        <span>Stay alert. Stay alive.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'core/js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% block title %}{% if object %}Edit Report{% else %}Report a Hazard{% endif %} — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-card">
+      <span class="eyebrow">{% if object %}Update report{% else %}New report{% endif %}</span>
+      <h2>{% if object %}Edit Hazard Report{% else %}Report a Road Hazard{% endif %}</h2>
+      <p style="color:var(--asphalt-600); font-size:0.92rem; margin-top:-6px;">
+        Be specific about location — landmark names and street names help responders find it fast.
+      </p>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="field">
+          <label for="id_hazard_type">Hazard Type</label>
+          {{ form.hazard_type }}
+          {% if form.hazard_type.errors %}<ul class="errorlist">{% for e in form.hazard_type.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="id_location">Location</label>
+          {{ form.location }}
+          {% if form.location.errors %}<ul class="errorlist">{% for e in form.location.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="id_severity">Severity</label>
+          {{ form.severity }}
+          {% if form.severity.errors %}<ul class="errorlist">{% for e in form.severity.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="id_description">Description</label>
+          {{ form.description }}
+          <div class="helptext" id="descCounter">0 characters</div>
+          {% if form.description.errors %}<ul class="errorlist">{% for e in form.description.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="id_photo">Photo (optional)</label>
+          {{ form.photo }}
+          <div id="photoPreview"></div>
+          {% if form.photo.errors %}<ul class="errorlist">{% for e in form.photo.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          {% if object %}Save Changes{% else %}Submit Report{% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

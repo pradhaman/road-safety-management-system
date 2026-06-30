@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %}
+{% block title %}Road Safety Management System — Home{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">// drive aware · ride safe · walk alert</div>
+        <h1>Know the rules.<br>Spot the risk.<br><span class="accent">Report the hazard.</span></h1>
+        <p class="lead">
+          One place for traffic rules, road sign meanings, safety guidance for every kind of
+          road user, emergency numbers, and a direct way to flag hazards before they become accidents.
+        </p>
+        <div class="hero-ctas">
+          <a href="{% url 'hazard_create' %}" class="btn btn-primary">Report a Hazard</a>
+          <a href="{% url 'traffic_rules' %}" class="btn btn-outline">Browse Traffic Rules</a>
+        </div>
+      </div>
+
+      <div class="signpost">
+        <div class="signpost-row">
+          <span class="num">{{ total_reports }}</span>
+          <span class="label">Hazards &amp; accidents<br>reported by the community</span>
+        </div>
+        <div class="signpost-row">
+          <span class="num">{{ resolved_reports }}</span>
+          <span class="label">Reports marked<br>resolved</span>
+        </div>
+        <div class="signpost-row">
+          <span class="num">{{ rules_count }}</span>
+          <span class="label">Traffic rules<br>documented</span>
+        </div>
+        <div class="signpost-row">
+          <span class="num">24×7</span>
+          <span class="label">Emergency helpline<br>access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">What's inside</span>
+        <h2>Everything a road user needs in one place</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-4">
+      <div class="card">
+        <h3>📘 Traffic Rules</h3>
+        <p>Plain-language explanations of key rules and the penalties for breaking them.</p>
+      </div>
+      <div class="card">
+        <h3>🛑 Sign Guide</h3>
+        <p>Mandatory, cautionary, and informatory signs explained — know what each one means.</p>
+      </div>
+      <div class="card">
+        <h3>🦺 Safety Tips</h3>
+        <p>Targeted guidance for drivers, riders, cyclists, and pedestrians.</p>
+      </div>
+      <div class="card">
+        <h3>📍 Hazard Reports</h3>
+        <p>Flag potholes, broken signals, and accident spots — visible to everyone, reviewed by admins.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Recently added</span>
+        <h2>Safety tips worth a re-read</h2>
+      </div>
+      <a href="{% url 'safety_tips' %}" class="btn btn-ghost btn-sm">View all tips</a>
+    </div>
+
+    <div class="grid grid-3">
+      {% for tip in recent_tips %}
+        <div class="card card-tip">
+          <span class="tag">{{ tip.get_audience_display }}</span>
+          <h3 style="margin-top:10px;">{{ tip.title }}</h3>
+          <p>{{ tip.content|truncatewords:22 }}</p>
+        </div>
+      {% empty %}
+        <p>No safety tips yet — once an admin adds some, they'll show up here.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="critical-callout">
+      <div class="stripe-top hazard-stripe"></div>
+      <div class="body">
+        In a road emergency right now? Don't browse — call. National emergency number: 112.
+        <a href="{% url 'emergency_contacts' %}" style="color:inherit; text-decoration:underline;">See all helpline numbers →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

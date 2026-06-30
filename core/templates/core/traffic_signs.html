@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% block title %}Traffic Signs Guide — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Read the road</span>
+        <h2>Traffic Signs &amp; Symbols Guide</h2>
+        <p class="sub">Mandatory signs must be obeyed; cautionary signs warn of conditions ahead; informatory signs guide you to facilities.</p>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <a href="{% url 'traffic_signs' %}" class="filter-pill {% if not selected_category %}active{% endif %}">All</a>
+      {% for value, label in categories %}
+        <a href="?category={{ value }}" class="filter-pill {% if selected_category == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="grid grid-4">
+      {% for sign in signs %}
+        <div class="sign-tile">
+          <div class="sign-tile-visual {{ sign.category }}">
+            {% if sign.image %}
+              <img src="{{ sign.image.url }}" alt="{{ sign.name }}" style="max-height:100%; max-width:100%;">
+            {% else %}
+              {% if sign.category == 'mandatory' %}🔵{% elif sign.category == 'cautionary' %}🔺{% else %}🔷{% endif %}
+            {% endif %}
+          </div>
+          <div class="sign-tile-body">
+            <h4>{{ sign.name }}</h4>
+            <p>{{ sign.description }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p>No signs found in this category yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

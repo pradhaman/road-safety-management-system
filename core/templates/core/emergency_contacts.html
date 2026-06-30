@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% block title %}Emergency Contacts — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Save these numbers</span>
+        <h2>Emergency Contact Information</h2>
+        <p class="sub">In an active emergency, call directly — don't wait to fill out a report.</p>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;">
+      <div style="padding:22px;">
+        {% for contact in contacts %}
+          <div class="contact-row">
+            <div>
+              <span class="tag">{{ contact.get_category_display }}</span>
+              <div class="contact-name" style="margin-top:6px;">{{ contact.name }}</div>
+              {% if contact.description %}<div class="contact-desc">{{ contact.description }}</div>{% endif %}
+              {% if contact.region %}<div class="contact-desc">Region: {{ contact.region }}</div>{% endif %}
+            </div>
+            <a href="tel:{{ contact.phone_number }}" class="contact-phone">{{ contact.phone_number }}</a>
+          </div>
+        {% empty %}
+          <p>No emergency contacts have been added yet. In the meantime, dial <strong>112</strong> for any emergency.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

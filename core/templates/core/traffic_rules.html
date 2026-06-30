@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% block title %}Traffic Rules — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Know before you go</span>
+        <h2>Traffic Rules &amp; Regulations</h2>
+        <p class="sub">Core rules every road user should know, with typical penalties for violations.</p>
+      </div>
+    </div>
+
+    <form method="get" class="filter-bar">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search rules… e.g. helmet, speed, seatbelt">
+      <button type="submit" class="btn btn-ghost btn-sm">Search</button>
+      {% if query %}<a href="{% url 'traffic_rules' %}" class="btn btn-ghost btn-sm">Clear</a>{% endif %}
+    </form>
+
+    <div class="grid grid-2">
+      {% for rule in rules %}
+        <div class="card card-rule">
+          <h3>{{ rule.title }}</h3>
+          <p>{{ rule.description }}</p>
+          {% if rule.penalty %}
+            <div class="penalty-tag">⚠ {{ rule.penalty }}</div>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p>No rules match your search. <a href="{% url 'traffic_rules' %}">Clear search</a> to see all rules.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

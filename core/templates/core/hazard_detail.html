@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ report.location }} — Hazard Report{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:760px;">
+    <a href="{% url 'hazard_list' %}" class="btn btn-ghost btn-sm" style="margin-bottom:18px;">← Back to all reports</a>
+
+    {% if report.severity == 'critical' %}
+      <div class="critical-callout">
+        <div class="stripe-top hazard-stripe"></div>
+        <div class="body">This report is marked CRITICAL severity. If this is an active emergency, call 112 immediately.</div>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      {% if report.photo %}
+        <img src="{{ report.photo.url }}" alt="Photo of hazard at {{ report.location }}" style="width:100%; border-radius:4px; margin-bottom:18px;">
+      {% endif %}
+
+      <span class="tag">{{ report.get_hazard_type_display }}</span>
+      <h2 style="margin:10px 0 6px;">{{ report.location }}</h2>
+
+      <div class="report-card-meta" style="margin-bottom:16px;">
+        <span class="signal-badge"><span class="signal-dot {{ report.severity_badge_class }}"></span>{{ report.get_severity_display }} severity</span>
+        <span class="signal-badge"><span class="signal-dot {{ report.status_badge_class }}"></span>{{ report.get_status_display }}</span>
+      </div>
+
+      <p style="font-size:1rem; color:var(--asphalt-800);">{{ report.description }}</p>
+
+      <div class="report-card-footer" style="margin-top:18px;">
+        <span>Reported by {{ report.reported_by.username }}</span>
+        <span>{{ report.reported_at|date:"d M Y, H:i" }}</span>
+      </div>
+
+      {% if user == report.reported_by %}
+        <div style="margin-top:20px; display:flex; gap:10px;">
+          <a href="{% url 'hazard_edit' report.pk %}" class="btn btn-outline btn-sm" style="border-color:var(--paper-dim); color:var(--asphalt-900);">Edit Report</a>
+          <a href="{% url 'hazard_delete' report.pk %}" class="btn btn-danger btn-sm">Delete Report</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

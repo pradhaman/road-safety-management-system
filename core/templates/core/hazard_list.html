@@ -1,0 +1,76 @@
+{% extends 'core/base.html' %}
+{% block title %}Hazard &amp; Accident Reports — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Community reported</span>
+        <h2>Hazard &amp; Accident Reports</h2>
+        <p class="sub">Real reports from road users. Spot something? Report it in under a minute.</p>
+      </div>
+      {% if user.is_authenticated %}
+        <a href="{% url 'hazard_create' %}" class="btn btn-primary">+ Report a Hazard</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Log In to Report</a>
+      {% endif %}
+    </div>
+
+    <form method="get" class="filter-bar">
+      <select name="status" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <select name="type" onchange="this.form.submit()">
+        <option value="">All Types</option>
+        {% for value, label in type_choices %}
+          <option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      {% if selected_status or selected_type %}
+        <a href="{% url 'hazard_list' %}" class="btn btn-ghost btn-sm">Clear Filters</a>
+      {% endif %}
+    </form>
+
+    <div class="grid grid-3">
+      {% for report in reports %}
+        <div class="report-card">
+          <div class="report-card-photo" {% if report.photo %}style="background-image:url('{{ report.photo.url }}');"{% endif %}>
+            {% if not report.photo %}No photo attached{% endif %}
+          </div>
+          <div class="report-card-body">
+            <div class="report-card-loc">{{ report.location }}</div>
+            <div class="report-card-meta">
+              <span class="signal-badge"><span class="signal-dot {{ report.severity_badge_class }}"></span>{{ report.get_severity_display }}</span>
+              <span class="signal-badge"><span class="signal-dot {{ report.status_badge_class }}"></span>{{ report.get_status_display }}</span>
+            </div>
+            <p class="report-card-desc">{{ report.description|truncatewords:18 }}</p>
+            <div class="report-card-footer">
+              <span>{{ report.get_hazard_type_display }}</span>
+              <span>{{ report.reported_at|date:"d M Y" }}</span>
+            </div>
+            <a href="{% url 'hazard_detail' report.pk %}" class="btn btn-ghost btn-sm btn-block">View Details</a>
+          </div>
+        </div>
+      {% empty %}
+        <p>No reports yet. Be the first to flag a hazard and help make the roads safer.</p>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}">‹ Prev</a>
+        {% endif %}
+        <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}">Next ›</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

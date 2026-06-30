@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% block title %}Log In — Road Safety{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-card">
+      <span class="eyebrow">Welcome back</span>
+      <h2>Log In</h2>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label for="id_username">Username</label>
+          {{ form.username }}
+        </div>
+        <div class="field">
+          <label for="id_password">Password</label>
+          {{ form.password }}
+        </div>
+        {% if form.non_field_errors %}
+          <ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+        {% endif %}
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+
+      <p style="margin-top:18px; font-size:0.9rem; text-align:center;">
+        Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
